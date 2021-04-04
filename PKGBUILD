@@ -16,12 +16,22 @@ provides=(${_pkgname})
 license=('GPL')
 conflicts=(${_pkgname})
 depends=('bzip2' 'expat>=2.0' 'gpm>=1.20.4' 'openssl' 'lua51' 'libidn' 'gc' 'tre' 'zlib')
-source=("git+https://github.com/rkd77/elinks#branch=elinks-0.14")
-md5sums=('SKIP')
+source=("git+https://github.com/rkd77/elinks#branch=elinks-0.14"
+        config.guess
+        config.sub)
+md5sums=('SKIP'
+         'c64564b7c7563dae5ebe016f340c9cd9'
+         'f31d2995a3a08c75df588c4800738387')
 
 pkgver() {
   cd "$srcdir/$_pkgname"
   git describe --tags --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+prepare() {
+  cd "$srcdir/$_pkgname"
+  cp -vf ${srcdir}/config.guess $srcdir/$_pkgname/config/
+  cp -vf ${srcdir}/config.sub   $srcdir/$_pkgname/config/
 }
 
 build() {
